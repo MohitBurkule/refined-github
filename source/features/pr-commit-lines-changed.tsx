@@ -117,16 +117,27 @@ async function addOnCommitPage(commitHash: HTMLElement): Promise<void> {
 	commitHash.prepend(buildDiffStat(additions, deletions, 'd-md-block d-none'));
 }
 
-// The owner/name are needed because cross-reference rows link to other repos
-const commitUrl = /^\/(?<owner>[\w\-.]+)\/(?<name>[\w\-.]+)\/commit\/(?<commitSha>[\da-f]{40})$/;
+// The owner/name are needed because cross-reference rows link to other repos. The path between
+// them and the sha varies: a plain `/commit/sha` for cross-references, `/pull/123/commits/sha`
+// for the PR's own commits — so only the first two and last segments are load-bearing.
+function parseCommitReference(pathname: string): CommitReference | undefined {
+	const segments = pathname.split('/').filter(Boolean);
+	const commitSha = segments.at(-1) ?? '';
+	if (segments.length < 3 || !/^[\da-f]{40}$/.test(commitSha)) {
+		return undefined;
+	}
+
+	const [owner, name] = segments;
+	return {owner, name, commitSha};
+}
 
 /** Both the PR's own commits and the "added a commit that referenced this pull request" rows */
 async function addOnTimeline(shaLinks: HTMLAnchorElement[]): Promise<void> {
 	const rows: Array<{shaContainer: HTMLElement; reference: CommitReference}> = [];
 	for (const shaLink of shaLinks) {
 		const shaContainer = closestElementOptional('.text-right', shaLink);
-		// Null on rows linking something other than a single commit, like a force-push comparison
-		const reference = commitUrl.exec(shaLink.pathname)?.groups as CommitReference | undefined;
+		// Undefined on rows linking something other than a single commit, like a comparison
+		const reference = parseCommitReference(shaLink.pathname);
 		if (shaContainer && reference) {
 			rows.push({shaContainer, reference});
 		}
