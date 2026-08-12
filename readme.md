@@ -234,6 +234,8 @@ https://github.com/refined-github/refined-github/wiki/Contributing#metadata-guid
 - [](# "pr-jump-to-first-non-viewed-file") [Jumps to first non-viewed file in a PR when clicking on the progress bar.](https://github-production-user-asset-6210df.s3.amazonaws.com/140871606/257011208-764f509d-fed9-424b-84e9-c01cf2fd428b.gif)
 - [](# "view-last-pr-deployment") [Adds a link to open the latest deployment to the PR header.](https://github.com/user-attachments/assets/90d2498d-ef65-45b9-96eb-07e7988bea61)
 - [](# "no-unnecessary-split-diff-view") [Always uses unified diffs on files where split diffs aren’t useful.](https://user-images.githubusercontent.com/46634000/121495005-89af8600-c9d9-11eb-822d-77e0b987e3b1.png)
+- [](# "auto-load-large-diffs") Automatically loads large diffs that GitHub hides behind a "Load diff" button.
+- [](# "pr-stack-navigation") Adds links to jump to the parent and child PRs of a stacked pull request.
 - [](# "emphasize-draft-pr-label") [Makes it easier to distinguish draft PR in lists.](https://user-images.githubusercontent.com/1402241/218252438-062a1ab3-4437-436d-9140-87bee23aaefb.png)
 - [](# "clean-checks-list") Prioritizes failing and pending checks in the merge checks list, and untruncates long check names.
 - [](# "mobile-tabs-pr") Makes the PR tabs smaller so they fit in the screen without scrolling.
