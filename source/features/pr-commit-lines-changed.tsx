@@ -29,7 +29,7 @@ function calculateDiffSquareCounts(linesAdded: number, linesDeleted: number): Sq
 	return {green, red, gray};
 }
 
-type Changes = [additions: number, deletions: number];
+type Changes = [additions: number, deletions: number, committedDate: string];
 
 /** Cross-reference rows link commits in other repos, so the repo travels with the sha */
 type CommitReference = {owner: string; name: string; commitSha: string};
@@ -49,6 +49,7 @@ async function fetchChanges(references: CommitReference[]): Promise<Map<string, 
 					... on Commit {
 						additions
 						deletions
+						committedDate
 					}
 				}
 			`).join('\n')
@@ -66,7 +67,7 @@ async function fetchChanges(references: CommitReference[]): Promise<Map<string, 
 		for (const [key, commit] of objectEntries(repository as AnyObject)) {
 			// A single commit resolves to null when it's been garbage-collected
 			if (commit) {
-				changes.set(key.slice(1), [commit.additions, commit.deletions]);
+				changes.set(key.slice(1), [commit.additions, commit.deletions, commit.committedDate]);
 			}
 		}
 	}
@@ -95,26 +96,30 @@ function repeatItems(count: number, Item: () => React.JSX.Element): React.JSX.El
 }
 
 // Not a JSX component: dom-chef calls those without props
-function buildDiffStat(additions: number, deletions: number, display: string): React.JSX.Element {
+function buildDiffStat(additions: number, deletions: number, committedDate: string, display: string): React.JSX.Element {
 	const tooltip = pluralize(additions + deletions, '1 line changed', '$$ lines changed');
 	const {green, red, gray} = calculateDiffSquareCounts(additions, deletions);
 	return (
-		<span ref={withTooltipRef(tooltip)} className={cx('ml-2 tmp-ml-2 diffstat', display)}>
-			<span className="color-fg-success">+{additions}</span>
-			{' '}
-			<span className="color-fg-danger">−{deletions}</span>
-			{' '}
-			{repeatItems(green, () => <span className="diffstat-block-added" />)}
-			{repeatItems(red, () => <span className="diffstat-block-deleted" />)}
-			{repeatItems(gray, () => <span className="diffstat-block-neutral" />)}
-		</span>
+		<>
+			{/* The title/tooltip on hover is `relative-time`'s own native behavior */}
+			<relative-time datetime={committedDate} className={cx('ml-2 tmp-ml-2 color-fg-muted', display)} />
+			<span ref={withTooltipRef(tooltip)} className={cx('ml-2 tmp-ml-2 diffstat', display)}>
+				<span className="color-fg-success">+{additions}</span>
+				{' '}
+				<span className="color-fg-danger">−{deletions}</span>
+				{' '}
+				{repeatItems(green, () => <span className="diffstat-block-added" />)}
+				{repeatItems(red, () => <span className="diffstat-block-deleted" />)}
+				{repeatItems(gray, () => <span className="diffstat-block-neutral" />)}
+			</span>
+		</>
 	);
 }
 
 async function addOnCommitPage(commitHash: HTMLElement): Promise<void> {
 	const commitSha = location.pathname.split('/').pop()!;
-	const [additions, deletions] = await commitChanges.get(commitSha);
-	commitHash.prepend(buildDiffStat(additions, deletions, 'd-md-block d-none'));
+	const [additions, deletions, committedDate] = await commitChanges.get(commitSha);
+	commitHash.prepend(buildDiffStat(additions, deletions, committedDate, 'd-md-block d-none'));
 }
 
 // The owner/name are needed because cross-reference rows link to other repos. The path between
@@ -165,9 +170,9 @@ async function addOnTimeline(shaLinks: HTMLAnchorElement[]): Promise<void> {
 	for (const {shaContainer, reference} of rows) {
 		const commitChange = changes.get(reference.commitSha);
 		if (commitChange) {
-			const [additions, deletions] = commitChange;
+			const [additions, deletions, committedDate] = commitChange;
 			// Beside the sha rather than inside its right-aligned column, which would stack it above
-			shaContainer.before(buildDiffStat(additions, deletions, 'd-md-inline-block d-none'));
+			shaContainer.before(buildDiffStat(additions, deletions, committedDate, 'd-md-inline-block d-none'));
 		}
 	}
 }
