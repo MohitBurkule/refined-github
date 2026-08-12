@@ -166,6 +166,7 @@ import './features/avoid-accidental-submissions.js';
 import './features/quick-review-comment-deletion.js';
 import './features/no-unnecessary-split-diff-view.js';
 import './features/auto-load-large-diffs.js';
+import './features/pr-stack-navigation.js';
 import './features/list-prs-for-branch.js';
 import './features/select-notifications.js';
 import './features/rgh-options-link.js';
