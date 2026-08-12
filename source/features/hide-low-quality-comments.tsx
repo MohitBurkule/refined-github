@@ -3,7 +3,7 @@ import './hide-low-quality-comments.css';
 import delegate, {type DelegateEvent} from 'delegate-it';
 import React from 'dom-chef';
 import * as pageDetect from 'github-url-detection';
-import {$, $$, $optional, closestElement, closestElementOptional, countElements, elementExists} from 'select-dom';
+import {$, $$, $$optional, $optional, closestElement, closestElementOptional, countElements, elementExists} from 'select-dom';
 
 import features from '../feature-manager.js';
 import delay from '../helpers/delay.js';
@@ -33,7 +33,8 @@ function hideComment(comment: HTMLElement): void {
 }
 
 function init(): void {
-	for (const similarCommentsBox of $$('.js-discussion .Details-element:not([data-body-version])')) {
+	// Most issues have none of these; zero matches is the common case, not an error
+	for (const similarCommentsBox of $$optional('.js-discussion .Details-element:not([data-body-version])')) {
 		hideComment(similarCommentsBox);
 	}
 
@@ -41,7 +42,7 @@ function init(): void {
 		? $optional(`${location.hash} ${singleParagraphCommentSelector}`)
 		: undefined;
 
-	for (const commentText of $$(singleParagraphCommentSelector)) {
+	for (const commentText of $$optional(singleParagraphCommentSelector)) {
 		// Exclude explicitly linked comments #5363
 		if (commentText === linkedComment) {
 			continue;
