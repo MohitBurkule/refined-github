@@ -1,0 +1,127 @@
+.rgh-crapmeter {
+	display: inline-flex;
+	gap: 4px;
+	align-items: center;
+	justify-content: center;
+	min-width: 20px;
+	padding: 0 6px;
+	margin-left: 8px;
+	font-size: 11px;
+	font-weight: 500;
+	line-height: 18px;
+	white-space: nowrap;
+	vertical-align: middle;
+	border: 1px solid var(--borderColor-default, var(--color-border-default, fuchsia));
+	border-radius: 2em;
+}
+
+.rgh-crapmeter-detail {
+	font-variant-numeric: tabular-nums;
+	opacity: 0.7;
+}
+
+.rgh-crapmeter-na {
+	color: var(--fgColor-muted, var(--color-fg-muted, fuchsia));
+	border-style: dashed;
+}
+
+.rgh-crapmeter-A {
+	color: var(--fgColor-success, var(--color-success-fg, fuchsia));
+	border-color: currentcolor;
+}
+
+.rgh-crapmeter-B {
+	color: var(--fgColor-accent, var(--color-accent-fg, fuchsia));
+	border-color: currentcolor;
+}
+
+.rgh-crapmeter-C {
+	color: var(--fgColor-attention, var(--color-attention-fg, fuchsia));
+	border-color: currentcolor;
+}
+
+.rgh-crapmeter-D,
+.rgh-crapmeter-F {
+	color: var(--fgColor-danger, var(--color-danger-fg, fuchsia));
+	border-color: currentcolor;
+}
+
+.rgh-crapmeter-F {
+	font-weight: 600;
+}
+
+.rgh-crapmeter-pending {
+	color: var(--fgColor-muted, var(--color-fg-muted, fuchsia));
+	border-style: dashed;
+	animation: rgh-crapmeter-pulse 1.2s ease-in-out infinite;
+}
+
+@keyframes rgh-crapmeter-pulse {
+	50% {
+		opacity: 0.45;
+	}
+}
+
+@media (prefers-reduced-motion: reduce) {
+	.rgh-crapmeter-pending {
+		animation: none;
+	}
+}
+
+.rgh-crapmeter-error {
+	color: var(--fgColor-muted, var(--color-fg-muted, fuchsia));
+	border-style: dotted;
+}
+
+/* Per-function markers on the Files tab */
+.rgh-crapmeter-fn {
+	display: inline-flex;
+	gap: 3px;
+	align-items: center;
+	padding: 0 5px;
+	margin-left: 8px;
+	font-family: var(--fontStack-system, system-ui);
+	font-size: 10px;
+	font-weight: 600;
+	line-height: 16px;
+	white-space: nowrap;
+	vertical-align: middle;
+	border: 1px solid currentcolor;
+	border-radius: 2em;
+	opacity: 0.85;
+}
+
+.rgh-crapmeter-fn-row {
+	box-shadow: inset 3px 0 0 0 currentcolor;
+}
+
+.rgh-crapmeter-fn-A {
+	color: var(--fgColor-success, var(--color-success-fg, fuchsia));
+}
+
+.rgh-crapmeter-fn-B {
+	color: var(--fgColor-accent, var(--color-accent-fg, fuchsia));
+}
+
+.rgh-crapmeter-fn-C {
+	color: var(--fgColor-attention, var(--color-attention-fg, fuchsia));
+}
+
+.rgh-crapmeter-fn-D,
+.rgh-crapmeter-fn-F {
+	color: var(--fgColor-danger, var(--color-danger-fg, fuchsia));
+}
+
+/*
+The file tree packs rows tightly, so its chips are shorter than the ones that sit beside
+a commit title. Scoped by the tree's own container so that the pending and error chips
+match without the placement code having to know which surface it is on.
+*/
+#pr-file-tree .rgh-crapmeter {
+	flex-shrink: 0;
+	min-width: 16px;
+	padding: 0 4px;
+	margin-left: 6px;
+	font-size: 9px;
+	line-height: 13px;
+}

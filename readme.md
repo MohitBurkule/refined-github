@@ -273,6 +273,8 @@ https://github.com/refined-github/refined-github/wiki/Contributing#metadata-guid
 - [](# "hide-diff-signs") [Hides diff signs since diffs are color coded already.](https://user-images.githubusercontent.com/1402241/54807718-149cec80-4cb9-11e9-869c-e265863211e3.png)
 - [](# "suggest-commit-title-limit") [Suggests limiting commit and PR titles to 72 characters.](https://github.com/user-attachments/assets/e0392989-9c60-4f5c-9052-27a3bb51d4e4)
 - [](# "tags-on-commits-list") [Displays the corresponding tags next to commits.](https://user-images.githubusercontent.com/1402241/285106537-3c882cb2-6847-4098-9e51-cf2951dee818.png)
+- [](# "pr-list-lines-changed") Shows the number of lines added and removed next to each pull request in a repository’s pull request list.
+- [](# "crapmeter-scores") Shows [crapmeter](https://github.com/MohitBurkule/crapmeter) code-quality scores next to commits, pull requests and changed files in Python repos. Requires a local `crapmeter --serve` (see the Options page).
 - [](# "mark-merge-commits-in-list") [Marks merge commits in commit lists.](https://github-production-user-asset-6210df.s3.amazonaws.com/1402241/285106996-9bdbc938-69c4-4692-8d47-11e30676de62.png)
 - [](# "deep-reblame") [When exploring blames, `Alt`-clicking the “Reblame” buttons will extract the associated PR’s commits first, instead of treating the commit as a single change.](https://github-production-user-asset-6210df.s3.amazonaws.com/140871606/257035884-732ee7ff-22c5-4049-af7d-f11117d2bbe4.png)
 - [](# "new-or-deleted-file") [Indicates with an icon whether files in commits and PRs are being added or removed.](https://user-images.githubusercontent.com/1402241/90332474-23262b00-dfb5-11ea-9a03-8fd676ea0fdd.png)

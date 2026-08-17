@@ -27,7 +27,9 @@
 	],
 	"host_permissions": [
 		"https://github.com/*",
-		"https://api.github.com/*"
+		"https://api.github.com/*",
+		"http://127.0.0.1/*",
+		"http://localhost/*"
 	],
 	"action": {
 		"default_icon": "assets/icon.png"

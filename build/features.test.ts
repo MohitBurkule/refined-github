@@ -17,6 +17,8 @@ const isGitIgnored = fastIgnore(readFileSync('.gitignore', 'utf8'));
 
 const noScreenshotExceptions = new Set([
 	// Only add feature here if it's a shortcut only and/or extremely clear by name or description
+	'crapmeter-scores', // Needs a local crapmeter server running to screenshot
+	'pr-list-lines-changed', // Same diffstat as pr-commit-lines-changed, on list rows
 	'last-update-sort',
 	'create-release-shortcut',
 	'profile-hotkey',

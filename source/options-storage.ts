@@ -10,6 +10,7 @@ const defaults = Object.assign({
 	actionUrl: 'https://github.com/',
 	customCss: '',
 	personalToken: '',
+	crapmeterUrl: 'http://127.0.0.1:8731',
 	logging: false,
 	logHttp: false,
 	// `extensible-nav` is off by default for now https://github.com/refined-github/refined-github/pull/9594
