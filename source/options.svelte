@@ -111,6 +111,29 @@
 	</HandleExpand>
 
 	<HandleExpand>
+		<details id="crapmeter">
+			<summary><strong>📉 crapmeter server</strong></summary>
+			<p>
+				The <code>crapmeter-scores</code> feature reads its numbers from
+				<a href="https://github.com/MohitBurkule/crapmeter">crapmeter</a>
+				running on this machine. Start it with <code>crapmeter --serve</code>.
+				Scores are hidden when it isn’t running.
+			</p>
+
+			<!-- eslint-disable-next-line @html-eslint/require-input-label -->
+			<p>
+				<input
+					class="monospace-field text-code"
+					type="url"
+					name="crapmeterUrl"
+					placeholder="http://127.0.0.1:8731"
+					spellcheck="false"
+				/>
+			</p>
+		</details>
+	</HandleExpand>
+
+	<HandleExpand>
 		<details id="css">
 			<summary><strong>💅 Custom CSS</strong></summary>
 			<p>Like a userstyle, useful to undo unwanted style changes</p>

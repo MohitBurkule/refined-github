@@ -96,7 +96,7 @@ function repeatItems(count: number, Item: () => React.JSX.Element): React.JSX.El
 }
 
 // Not a JSX component: dom-chef calls those without props
-function buildDiffStat(additions: number, deletions: number, committedDate: string, display: string): React.JSX.Element {
+export function buildDiffStat(additions: number, deletions: number, committedDate: string, display: string): React.JSX.Element {
 	const tooltip = pluralize(additions + deletions, '1 line changed', '$$ lines changed');
 	const {green, red, gray} = calculateDiffSquareCounts(additions, deletions);
 	return (

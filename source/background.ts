@@ -9,6 +9,7 @@ import addPermissionToggle from 'webext-permission-toggle';
 import {StorageItem} from 'webext-storage';
 import {globalCache} from 'webext-storage-cache'; // Also needed to regularly clear the cache
 
+import {type AnalyzeRequest, type CrapmeterResponse,getServerUrl} from './helpers/crapmeter.js';
 import {doesBrowserActionOpenOptions} from './helpers/feature-utils.js';
 import {styleHotfixes} from './helpers/hotfix.js';
 import isDevelopmentVersion from './helpers/is-development-version.js';
@@ -19,6 +20,45 @@ import addIdentifyFeatureContextMenu from './options/identify-feature.js';
 import addReloadWithoutContentScripts from './options/reload-without.js';
 
 const {version} = chrome.runtime.getManifest();
+
+/*
+`crapmeter --serve` runs on the user's machine. The request has to originate here rather
+than in the content script: github.com's CSP blocks a page-context fetch to localhost.
+Both handlers resolve rather than reject — "the server isn't running" is the common case
+and the caller renders it as "unavailable", not as a failure.
+*/
+const crapmeterTimeout = 15_000;
+
+async function crapmeterFetch(path: string, body?: unknown): Promise<Response> {
+	const url = await getServerUrl();
+	return fetch(url + path, {
+		method: body === undefined ? 'GET' : 'POST',
+		headers: {'Content-Type': 'application/json'},
+		body: body === undefined ? undefined : JSON.stringify(body),
+		signal: AbortSignal.timeout(crapmeterTimeout),
+	});
+}
+
+async function crapmeterHealth(): Promise<{ok: boolean}> {
+	try {
+		const response = await crapmeterFetch('/health');
+		return {ok: response.ok};
+	} catch {
+		return {ok: false};
+	}
+}
+
+async function crapmeterAnalyze(request: AnalyzeRequest): Promise<CrapmeterResponse> {
+	try {
+		const response = await crapmeterFetch('/analyze', request);
+		const payload = await response.json();
+		return response.ok
+			? {ok: true, summary: payload.summary, functions: payload.functions ?? []}
+			: {ok: false, error: payload.error ?? `HTTP ${response.status}`};
+	} catch (error) {
+		return {ok: false, error: error instanceof Error ? error.message : String(error)};
+	}
+}
 
 const welcomeShown = new StorageItem('welcomed', {defaultValue: false});
 
@@ -65,6 +105,8 @@ handleMessages({
 	async getStyleHotfixes() {
 		return styleHotfixes.get(version);
 	},
+	crapmeterAnalyze,
+	crapmeterHealth,
 });
 
 chrome.action.onClicked.addListener(async tab => {
