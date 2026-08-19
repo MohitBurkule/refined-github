@@ -87,8 +87,12 @@ const commitChanges = new CachedFunction('commit-changes', {
 
 		return commitChange;
 	},
-	// A commit's diffstat never changes, so this only expires to bound storage growth
-	maxAge: {days: 100},
+	// `webext-storage-cache` only evicts entries past their OWN maxAge on quota pressure
+	// (deleteExpired), never oldest-first — so an entry that hasn't expired yet just fails
+	// to write once chrome.storage.local (~10MB, no unlimitedStorage) is full. This runs
+	// per-commit on every PR timeline now, not just single-commit pages, so maxAge has to
+	// stay short enough that daily cleanup keeps pace with new writes.
+	maxAge: {days: 2},
 });
 
 function repeatItems(count: number, Item: () => React.JSX.Element): React.JSX.Element[] {
